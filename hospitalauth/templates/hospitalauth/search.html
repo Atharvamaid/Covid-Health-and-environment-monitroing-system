@@ -1,0 +1,21 @@
+{% extends 'hospitalauth/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+                <div class="container mt-4" style="cursor : pointer;">
+                    {% if messages %}
+                        {% for i in messages %}
+                                        <div class="alert alert-{{ i.tags }}">
+                                            {{ i }}
+                                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="container-fluid border rounded-lg bg-light" onclick="location.href='{% url 'chat' id %}'">
+                        <h1>{{ hospital.val.Hospital_Name }}</h1>
+                        <h5>{{ hospital.val.Address }}</h5>
+                    </div>
+                </div>
+
+{% endblock content %}

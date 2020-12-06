@@ -27,6 +27,8 @@
                             <br>
 
                             <button class="btn text-white change_status" id="{{ i.key|slugify }}"  style="background-color : #1565c0">Change Status</button>
+                                <a class="btn mx-2" href="{% url 'contact' i.key|slugify %}" style="border : 1px solid #1565c0; color : #1565c0">Messages</a>
+
                             </form>
                         </div>
                     </div>

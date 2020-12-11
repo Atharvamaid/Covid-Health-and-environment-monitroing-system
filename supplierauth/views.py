@@ -74,7 +74,7 @@ def confirm_order(request, name):
     db.child('suppliers').child(request.user.id).child('Confirmed_Orders').child(name).update({'order_status': ' confirmed'})
 
     db.child('suppliers').child(request.user.id).child('orders_recieved').child(name).remove()
-    messages.success(request, f'successfully Confirmed Order from {name}')
+    messages.success(request, f'Successfully Confirmed Order from {name}')
     return redirect('confirmed_orders_list')
 
 @csrf_protect

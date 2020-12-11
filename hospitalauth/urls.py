@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.views import PasswordChangeView,PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
 from django.urls import path
 from . import views
 
@@ -17,6 +18,19 @@ urlpatterns = [
     path('request_supplies/', views.request_supplies, name='request_supplies'),
     path('place_order/<int:id>/', views.place_order, name="place_order"),
     path('my_orders/', views.my_orders, name='myorders'),
-    path('forget_password/',views.forget_password, name="forget_password"),
+    path('password-reset/',PasswordResetView.as_view(template_name='hospitalauth/forget_password.html'),
+         name='password_reset'),
+    path('password-reset/done/',
+         PasswordResetDoneView.as_view(template_name='hospitalauth/password_reset_done.html'),
+         name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         PasswordResetConfirmView.as_view(template_name='hospitalauth/password_reset_confirm.html'),
+         name='password_reset_confirm'),
+    path('password-reset-complete/',
+         PasswordResetCompleteView.as_view(
+             template_name='hospitalauth/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
     path('send_message/<str:name>', views.send_message, name='send_message')
+
 ]

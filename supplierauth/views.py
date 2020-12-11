@@ -93,6 +93,7 @@ def confirmed_orders_list(request):
     city = db.child("suppliers").child(request.user.id).child('city').get()
     address = db.child("suppliers").child(request.user.id).child('Address').get()
     confirmedorders = db.child('suppliers').child(request.user.id).child('Confirmed_Orders').get()
+
     return render(request, 'supplierauth/confirmed_orders_list.html', {'name':name, 'city':city, 'address':address, 'confirmedorders':confirmedorders}, )
 
 def available_supplies(request):

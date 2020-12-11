@@ -15,7 +15,6 @@
             <div class="container-fluid">
                 <div class=" p-3 my-3 border bg-light rounded ">
                 <h5>Recieved from - {{ i.key }}</h5>
-                    {{ i.key|slugify }}
                 <div class="row">
                     {% for j,k in i.val.items %}
                         {% if j != 'order_status' %}

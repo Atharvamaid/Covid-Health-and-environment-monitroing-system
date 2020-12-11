@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,logout, login
 from random_username.generate import generate_username
 from .ml import df3, fig, fig1, fig2, fig3, fig4, fig5
-
+from django.contrib.auth.views import PasswordChangeView
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
 # Create your views here.
@@ -33,10 +33,7 @@ def Home(request):
   else:
     return render(request, 'hospitalauth/index.html')
 
-def forget_password(request):
-  if request.method=='POST':
-    messages.success(request, f"We have successfully sent a confirmation email to {request.POST['email']}")
-  return render(request, 'hospitalauth/forget_password.html')
+
 
 
 
@@ -97,17 +94,18 @@ def Search(request):
     address = db.child("Hospitals").child(request.user.id).child("Address").get()
     search = request.POST['q']
     try:
-      hospital_id = User.objects.get(first_name=search).id
-      hospital = db.child("Hospitals").child(hospital_id).get()
+      supplier_id = User.objects.get(first_name=search).id
+      supplier = db.child("suppliers").child(supplier_id).get()
       messages.success(request, f'results found for {search} !')
     except User.DoesNotExist:
       messages.warning(request, 'results not found')
-      return redirect('dashboard')
+
   return render(request, 'hospitalauth/search.html',
-                {"hospital": hospital, "name": name, "address": address, "id": hospital_id})
+                {"supplier": supplier, "name": name, "address": address, "id": supplier_id})
 
 
 def chat(request, name):
+  print(name)
   db = firebase.database()
   name1 = name.split('-')
   name1 = " ".join(name1)
@@ -115,7 +113,7 @@ def chat(request, name):
   name = db.child('Hospitals').child(request.user.id).child('Hospital_Name').get()
   address = db.child("Hospitals").child(request.user.id).child("Address").get()
   city = db.child('Hospitals').child(request.user.id).child("city").get()
-  print(name1)
+
 
   supplierid = User.objects.get(first_name=name1).id
 
@@ -207,28 +205,31 @@ def CreateAccount(request):
     district = request.POST['dist']
     city = request.POST['city']
     if name.isalnum()==False or address.isalnum()==False or city.isalnum()==False or district.isalnum()==False:
-      if request.POST['pass'] == request.POST['confpass']:
-        try:
-          useremail = User.objects.get(email=email)
-          messages.warning(request, 'This email is already registered !')
-        except User.DoesNotExist:
-          password = request.POST['pass']
-          user = User.objects.create_user(username=username[0], email=email, password=password, first_name=name,
-                                          last_name='hospital')
-          if user:
-            messages.success(request, f'Account Created for {name}')
-            data = dats
-            db = firebase.database()
-            db.child('Hospitals').child(user.id).set(
-              {"Hospital_Name": name, "Address": address, "city": city, 'district': district})
-            db.child("Hospitals").child(user.id).child("supplies").set(data)
-            login(request, user)
-            return redirect('dashboard')
-          else:
-            messages.warning(request, 'Account not created try again')
+      if name.isspace() or address.isspace() or city.isspace() or district.isspace():
+        messages.warning(request, 'please enter valid information')
       else:
-        messages.warning(request, "passwords didn't match ! Try again")
-        return redirect('signup')
+        if request.POST['pass'] == request.POST['confpass']:
+          try:
+            useremail = User.objects.get(email=email)
+            messages.warning(request, 'This email is already registered !')
+          except User.DoesNotExist:
+            password = request.POST['pass']
+            user = User.objects.create_user(username=username[0], email=email, password=password, first_name=name,
+                                            last_name='hospital')
+            if user:
+              messages.success(request, f'Account Created for {name}')
+              data = dats
+              db = firebase.database()
+              db.child('Hospitals').child(user.id).set(
+                {"Hospital_Name": name, "Address": address, "city": city, 'district': district})
+              db.child("Hospitals").child(user.id).child("supplies").set(data)
+              login(request, user)
+              return redirect('dashboard')
+            else:
+              messages.warning(request, 'Account not created try again')
+        else:
+          messages.warning(request, "passwords didn't match ! Try again")
+          return redirect('signup')
     else:
       messages.warning(request, 'Please provide valid information ! Fields must be text')
 
@@ -256,27 +257,30 @@ def create_supplier_account(request):
   suppass = request.POST['suppass']
   supcity = request.POST['supcity']
   if supname.isalnum() == False or supaddress.isalnum() == False or supcity.isalnum() == False or supdist.isalnum() == False:
-    if request.POST['suppass'] == request.POST['supconfpass']:
-      try:
-        useremail = User.objects.get(email=supemail)
-        messages.warning(request, 'This email is already registered !')
-        return redirect('signup')
-      except User.DoesNotExist:
-        supplier = User.objects.create_user(username=supusername[0], email=supemail, password=suppass,
-                                            first_name=supname,
-                                            last_name='supplier')
-        if supplier:
-          db = firebase.database()
-          db.child('suppliers').child(supplier.id).set(
-            {'Supplier_Name': supname, "city": supcity, 'Address': supaddress, 'district': supdist,
-             'available_supplies': dat})
-          print('accout created for supplier')
-          login(request, supplier)
-          messages.success(request, f'Account created for {supname} !')
-        return redirect('supplier_dashboard')
+    if supname.isspace() or supaddress.isspace() or supcity.isspace() or supdist.isspace():
+      messages.warning(request, 'Please enter valid imformation')
     else:
-      messages.warning(request, "Passwords didn't match ! Please try again")
-      return redirect('signup')
+      if request.POST['suppass'] == request.POST['supconfpass']:
+        try:
+          useremail = User.objects.get(email=supemail)
+          messages.warning(request, 'This email is already registered !')
+          return redirect('signup')
+        except User.DoesNotExist:
+          supplier = User.objects.create_user(username=supusername[0], email=supemail, password=suppass,
+                                              first_name=supname,
+                                              last_name='supplier')
+          if supplier:
+            db = firebase.database()
+            db.child('suppliers').child(supplier.id).set(
+              {'Supplier_Name': supname, "city": supcity, 'Address': supaddress, 'district': supdist,
+               'available_supplies': dat})
+            print('accout created for supplier')
+            login(request, supplier)
+            messages.success(request, f'Account created for {supname} !')
+          return redirect('supplier_dashboard')
+      else:
+        messages.warning(request, "Passwords didn't match ! Please try again")
+        return redirect('signup')
   else:
     messages.warning(request, "Please provide valid information")
     return redirect('signup')
@@ -333,7 +337,9 @@ def place_order(request, id):
 
     for i,j in supplier.val()['available_supplies'].items():
       if j == 'yes':
-        data[i] = request.POST[i]
+        if request.POST[i] != "":
+          data[i] = request.POST[i]
+
     supplier_name = User.objects.get(id=id).first_name
     data['order_status'] = 'Order Placed'
     db.child('Hospitals').child(request.user.id).child('Placed_Order').child(supplier_name).set(data)

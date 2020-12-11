@@ -79,7 +79,8 @@
 
         </div>
         <div class=" mt-3 row">
-            {% for i in availablesupplies.each %}
+            {% if availablesupplies %}
+                {% for i in availablesupplies.each %}
 
                     {% if i.val == 'yes' %}
                         <div class="col-md-3">
@@ -119,7 +120,10 @@
                         </div>
                     {% endif %}
 
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No supplies yet. Add your available supplies</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

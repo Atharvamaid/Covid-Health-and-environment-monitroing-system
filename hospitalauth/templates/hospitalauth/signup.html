@@ -30,23 +30,23 @@
                         <legend>Create Hospital Account</legend>
                         <div class="form-group">
                             <label for="hosname">Hospital Name : </label>
-                            <input type="text" class="form-control" id="hosname" name="hosname" placeholder="Enter hospital name" required>
+                            <input type="text" pattern="^[A-Za-z -]+$" title="Must be a valid Hospital name"  class="form-control" id="hosname" name="hosname" placeholder="Enter hospital name" required>
                         </div>
                         <div class="form-group">
                             <label for="address">Address : </label>
-                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter Address " required>
+                            <input type="text" class="form-control" title="Must be a valid address " pattern="^[A-Za-z0-9, -]+$" id="address" name="address" placeholder="Enter Address " required>
                         </div>
                         <div class="form-group">
                             <label for="city">City : </label>
-                            <input type="text" class="form-control" id="city" name="city" placeholder="Enter City " required>
+                            <input type="text" class="form-control" title="Must be a valid city name" pattern="^[A-Za-z -]+$" id="city" name="city" placeholder="Enter City " required>
                         </div>
                         <div class="form-group">
                             <label for="dist">District : </label>
-                            <input type="text" class="form-control" id="dist" name="dist" placeholder="Enter District " required>
+                            <input type="text" class="form-control" title="Must be a valid District name" pattern="^[A-Za-z -]+$" id="dist" name="dist" placeholder="Enter District " required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email : </label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                            <input type="email" class="form-control" title="Must be a valid email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" id="email" name="email" placeholder="Enter email" required>
                         </div>
                        <div class="form-group">
                             <label for="pass">Password : </label>
@@ -72,23 +72,23 @@
                         <legend>Create Supplier Account</legend>
                         <div class="form-group">
                             <label for="supname">Organization Name : </label>
-                            <input type="text" class="form-control" id="supname" name="supname" placeholder="Enter organization name" required>
+                            <input type="text" class="form-control" title="Must be a valid name" pattern="^[A-Za-z -]+$" id="supname" name="supname" placeholder="Enter organization name" required>
                         </div>
                         <div class="form-group">
                             <label for="supaddress">Address : </label>
-                            <input type="text" class="form-control" id="supaddress" name="supaddress" placeholder="Enter Address" required>
+                            <input type="text" class="form-control" title="Must be a valid address" pattern="^[A-Za-z0-9, -]+$"  id="supaddress" name="supaddress" placeholder="Enter Address" required>
                         </div>
                         <div class="form-group">
                             <label for="supcity">City : </label>
-                            <input type="text" class="form-control" id="supcity" name="supcity" placeholder="Enter City" required>
+                            <input type="text" class="form-control" title="must be a valid city" pattern="^[A-Za-z -]+$" id="supcity" name="supcity" placeholder="Enter City" required>
                         </div>
                         <div class="form-group">
                             <label for="supdist">District : </label>
-                            <input type="text" class="form-control" id="supdist" name="supdist" placeholder="Enter District" required>
+                            <input type="text" class="form-control" title="Must be a valid district" pattern="^[A-Za-z -]+$" id="supdist" name="supdist" placeholder="Enter District" required>
                         </div>
                         <div class="form-group">
                             <label for="supemail">Email : </label>
-                            <input type="email" class="form-control" id="supemail" name="supemail" placeholder="Enter email" required>
+                            <input type="email" class="form-control" title="Must be a valid email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" id="supemail" name="supemail" placeholder="Enter email" required>
                         </div>
                        <div class="form-group">
                             <label for="suppass">Password : </label>
